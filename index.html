@@ -1,79 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Blog</title>
-  <style>
-    body {
-      font-family: Georgia, serif;
-      max-width: 700px;
-      margin: 2rem auto;
-      padding: 1rem;
-      line-height: 1.6;
-      background-color: #fdfdfd;
-      color: #333;
-    }
-    h1, h2 {
-      font-family: 'Helvetica Neue', sans-serif;
-    }
-    a {
-      color: #007acc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .post {
-      margin-bottom: 3rem;
-    }
-    .post-title {
-      margin-bottom: 0.2rem;
-    }
-    .post-date {
-      font-size: 0.9rem;
-      color: #666;
-    }
-    nav {
-      margin-bottom: 3rem;
-    }
-    footer {
-      margin-top: 4rem;
-      font-size: 0.8rem;
-      color: #999;
-      text-align: center;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Personal Blog</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
+  <h1>🌿 My Blog</h1>
 
-  <header>
-    <h1>🌸 My Blog</h1>
-    <p>A cozy corner for my thoughts, writings, and random brain dumps.</p>
-    <nav>
-      <a href="index.html">Home</a> | 
-      <a href="#">About</a> | 
-      <a href="#">Archive</a>
-    </nav>
-  </header>
+  <section id="blogPosts">
+    <!-- Posts will be dynamically added here -->
+  </section>
 
-  <main>
-    <div class="post">
-      <h2 class="post-title">First Post: Hello World</h2>
-      <p class="post-date">April 14, 2025</p>
-      <p>Welcome to my new personal blog! I’m planning to write about whatever’s on my mind — tech stuff, books I’m reading, half-baked thoughts, and probably my cat at some point.</p>
-    </div>
-
-    <div class="post">
-      <h2 class="post-title">Why I Still Love Writing HTML by Hand</h2>
-      <p class="post-date">April 10, 2025</p>
-      <p>There's something meditative about writing raw HTML and CSS. No frameworks, no distractions — just the web the way it used to be.</p>
-    </div>
-  </main>
-
-  <footer>
-    &copy; 2025 Your Name. Made with ☕ and good vibes.
-  </footer>
-
+  <script>
+    // Load the list of posts from posts.json
+    fetch('posts.json')
+      .then(response => response.json())
+      .then(postFiles => {
+        const blogDiv = document.getElementById('blogPosts');
+        postFiles.forEach(file => {
+          fetch(file)
+            .then(res => res.text())
+            .then(markdown => {
+              const htmlContent = marked(markdown); // Convert markdown to HTML
+              const post = document.createElement('article');
+              post.innerHTML = htmlContent;
+              blogDiv.appendChild(post);
+            });
+        });
+      })
+      .catch(err => console.error('Error loading blog posts:', err));
+  </script>
 </body>
 </html>
